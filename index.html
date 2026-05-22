@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ site_title }}</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #0b0e14;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+        }
+        .navbar { background-color: rgba(11, 14, 20, 0.95); border-bottom: 1px solid #222; }
+        .hero-section { padding: 100px 0; }
+
+        .btn-gradient {
+            background: linear-gradient(90deg, #12c2e9, #c471ed, #f64f59);
+            border: none;
+            color: white;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-gradient:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); color: white; }
+
+        .profile-img {
+            border: 8px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .text-gradient {
+            background: linear-gradient(90deg, #12c2e9, #c471ed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* İkonlar için ufak bir parlatma efekti */
+        .social-link {
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+        .social-link:hover {
+            opacity: 1;
+            transform: scale(1.2);
+            color: #12c2e9 !important;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-4" href="/">
+                İbrahim Metehan <span class="text-primary">Sarıateş</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="/">Anasayfa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">İletişim</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container hero-section">
+        <div class="row align-items-center">
+            <div class="col-lg-7 text-start">
+                <h6 class="text-primary fw-bold mb-3">👋 Merhaba, ben</h6>
+                <h1 class="display-3 fw-bold mb-2">{{ home_banner_name }}</h1>
+                <h3 class="text-gradient mb-4">{{ home_banner_title }}</h3>
+                <p class="lead text-secondary mb-5">{{ home_banner_description }}</p>
+
+                <div class="d-flex gap-3 align-items-center">
+                    <a class="btn btn-gradient btn-lg px-4 py-2 rounded-3" href="/contact">
+                        <i class="fas fa-envelope me-2"></i>Bana Ulaşın
+                    </a>
+
+                    <div class="d-flex gap-4 ms-3">
+                        <a href="{{ github_url }}" target="_blank" class="text-white fs-3 social-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="{{ linkedin_url }}" target="_blank" class="text-white fs-3 social-link">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5 text-center mt-5 mt-lg-0">
+                <img src="{% get_media_prefix %}me.jpg"
+                     class="rounded-circle profile-img"
+                     style="width: 320px; height: 320px; object-fit: cover;"
+                     alt="İbrahim Metehan Sarıateş">
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
