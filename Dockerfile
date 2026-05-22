@@ -11,7 +11,7 @@ RUN pip install -r /tmp/requirements.txt
 COPY . /srv/app
 WORKDIR /srv/app
 # Run migrations
-RUN python manage.py migrate
+#RUN python manage.py migrate
 # Expose port 8000 for the Django development server
 EXPOSE 8000
 # Start the Django development server

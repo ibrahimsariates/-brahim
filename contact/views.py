@@ -1,19 +1,15 @@
 from django.shortcuts import render
 from .models import GeneralSetting
 
-
 def index(request):
-    # Veritabanındaki tüm ayarları çekiyoruz [cite: 710]
+    # Veritabanındaki tüm ayarları çekiyoruz
     all_settings = GeneralSetting.objects.all()
 
-    # Verileri direkt isimleriyle kullanabilmek için sözlüğü açıyoruz
+    # Verileri bir sözlük (dictionary) haline getiriyoruz
+    # Bu sayede HTML'de {{ home_banner_name }} yazdığında Django bunu bulacak
     context = {setting.name: setting.parameter for setting in all_settings}
 
-    # Debug için terminale basalım (Hangi veriler geliyor gör)
-    print(f"DEBUG - Sayfaya Giden Veriler: {context}")
-
     return render(request, 'index.html', context)
-
 
 def contact(request):
     return render(request, 'contact.html')

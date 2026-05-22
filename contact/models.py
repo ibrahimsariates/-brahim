@@ -1,20 +1,34 @@
 from django.db import models
 
 class AbstractModel(models.Model):
-    updated_date = models.DateTimeField(blank=True, auto_now=True, verbose_name='Updated Date')
-    created_date = models.DateTimeField(blank=True, auto_now_add=True, verbose_name='Created Date')
+    updated_date = models.DateTimeField(auto_now=True)
+    created_date = models.DateTimeField(auto_now_add=True)
     class Meta:
         abstract = True
 
+# 1. Genel Ayarlar (Mail, Konum, Telefon vb.)
 class GeneralSetting(AbstractModel):
-    name = models.CharField(default='', max_length=254, blank=True, verbose_name='Name', help_text='Ayarın adı')
-    description = models.CharField(default='', max_length=254, blank=True, verbose_name='Description')
-    parameter = models.CharField(default='', max_length=254, blank=True, verbose_name='Parameter', help_text='Ayarın değeri')
+    key = models.CharField(max_length=100, verbose_name="Ayar Anahtarı (örn: Email)")
+    value = models.CharField(max_length=254, verbose_name="Ayar Değeri")
+    def __str__(self): return f"{self.key}: {self.value}"
 
-    def __str__(self):
-        return f'General Setting: {self.name}'
+# 2. Projeler (Görseldeki Proje Kartları)
+class Project(AbstractModel):
+    title = models.CharField(max_length=200, verbose_name="Proje Başlığı")
+    category = models.CharField(max_length=100, verbose_name="Kategori")
+    description = models.TextField(verbose_name="Açıklama")
+    image = models.ImageField(upload_to='portfolio/', verbose_name="Görsel")
+    def __str__(self): return self.title
 
-    class Meta:
-        verbose_name = 'General Setting'
-        verbose_name_plural = 'General Settings'
-        ordering = ('name',)
+# 3. Özgeçmiş (Deneyim ve Eğitim)
+class Resume(AbstractModel):
+    title = models.CharField(max_length=200, verbose_name="Başlık (örn: Junior SAP Consultant)")
+    date = models.CharField(max_length=100, verbose_name="Tarih Aralığı")
+    content = models.TextField(verbose_name="Açıklama/Detay")
+    def __str__(self): return self.title
+
+# 4. Sosyal Linkler
+class SocialLink(AbstractModel):
+    platform = models.CharField(max_length=100, verbose_name="Platform (Github, LinkedIn)")
+    url = models.URLField(verbose_name="Link")
+    def __str__(self): return self.platform
