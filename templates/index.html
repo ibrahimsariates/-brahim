@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>{{ site_title }}</title>
+  <title>{% if hero %}{{ hero.name }}{% else %}Portfolyo{% endif %}</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
@@ -103,8 +103,9 @@
       </nav>
 
       <div class="social-links text-center">
-        <a href="https://github.com/ibrahimsariates" target="_blank" class="github"><i class="bi bi-github"></i></a>
-        <a href="https://www.linkedin.com/in/ibrahim-metehan-sarıateş-696996356/" target="_blank" class="linkedin"><i class="bi bi-linkedin"></i></a>
+        {% for link in social_links %}
+          <a href="{{ link.url }}" target="_blank" class="{{ link.platform|lower }}"><i class="{{ link.icon_class }}"></i></a>
+        {% endfor %}
       </div>
 
     </div>
@@ -113,6 +114,7 @@
 
   <main class="main">
 
+    <!-- ==================== HERO BÖLÜMÜ ==================== -->
     <section id="hero" class="hero section">
 
       <div class="background-elements">
@@ -127,10 +129,15 @@
 
             <div class="col-lg-6" data-aos="fade-right" data-aos-delay="100">
               <div class="hero-text">
-                <h1>İbrahim<span class="accent-text">.</span></h1>
-                <h2>{{ home_banner_name }}</h2>
-                <p class="lead"><span class="typed" data-typed-items="{{ home_banner_title }}"></span></p>
-                <p class="description">{{ home_banner_description }}</p>
+                {% if hero %}
+                  <h1>{{ hero.name }}<span class="accent-text">.</span></h1>
+                  <h2>{{ hero.subtitle }}</h2>
+                  <p class="lead"><span class="typed" data-typed-items="{{ hero.typed_titles }}"></span></p>
+                  <p class="description">{{ hero.description }}</p>
+                {% else %}
+                  <h1>İsim<span class="accent-text">.</span></h1>
+                  <h2>Alt Başlık</h2>
+                {% endif %}
 
                 <div class="hero-actions">
                   <a href="#portfolio" class="btn btn-primary">Projelerimi İncele</a>
@@ -138,8 +145,9 @@
                 </div>
 
                 <div class="social-links">
-                  <a href="https://github.com/ibrahimsariates" target="_blank"><i class="bi bi-github"></i></a>
-                  <a href="https://www.linkedin.com/in/ibrahim-metehan-sarıateş-696996356/" target="_blank"><i class="bi bi-linkedin"></i></a>
+                  {% for link in social_links %}
+                    <a href="{{ link.url }}" target="_blank"><i class="{{ link.icon_class }}"></i></a>
+                  {% endfor %}
                 </div>
               </div>
             </div>
@@ -148,7 +156,11 @@
               <div class="hero-visual">
                 <div class="profile-container">
                   <div class="profile-background"></div>
-                  <img src="{% get_media_prefix %}me.jpg" alt="{{ home_banner_name }}" class="profile-image" style="object-fit: cover;">
+                  {% if hero and hero.profile_image %}
+                    <img src="{{ hero.profile_image.url }}" alt="{{ hero.name }}" class="profile-image" style="object-fit: cover;">
+                  {% else %}
+                    <img src="{% get_media_prefix %}me.jpg" alt="Profil" class="profile-image" style="object-fit: cover;">
+                  {% endif %}
                 </div>
               </div>
             </div>
@@ -159,6 +171,7 @@
 
     </section>
 
+    <!-- ==================== HAKKIMDA BÖLÜMÜ ==================== -->
     <section id="about" class="about section">
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -168,7 +181,11 @@
             <div class="profile-card">
               <div class="profile-header">
                 <div class="profile-image">
-                  <img src="{% get_media_prefix %}me.jpg" alt="{{ home_banner_name }}" class="img-fluid" style="object-fit: cover; aspect-ratio: 1/1;">
+                  {% if hero and hero.profile_image %}
+                    <img src="{{ hero.profile_image.url }}" alt="{{ hero.name }}" class="img-fluid" style="object-fit: cover; aspect-ratio: 1/1;">
+                  {% else %}
+                    <img src="{% get_media_prefix %}me.jpg" alt="Profil" class="img-fluid" style="object-fit: cover; aspect-ratio: 1/1;">
+                  {% endif %}
                 </div>
                 <div class="profile-badge">
                   <i class="bi bi-check-circle-fill"></i>
@@ -176,8 +193,8 @@
               </div>
 
               <div class="profile-content">
-                <h3>{{ home_banner_name }}</h3>
-                <p class="profession">{{ home_banner_title }}</p>
+                <h3>{% if hero %}{{ hero.subtitle }}{% endif %}</h3>
+                <p class="profession">{% if hero %}{{ hero.typed_titles }}{% endif %}</p>
 
                 <div class="contact-links">
                   <a href="#contact" class="contact-item">
@@ -191,15 +208,24 @@
 
           <div class="col-lg-7" data-aos="fade-left" data-aos-delay="300">
             <div class="about-content">
-              <div class="section-header">
-                <span class="badge-text">Beni Tanıyın</span>
-                <h2>Sistem Mimarisi ve Global Çözümler Konusunda Tutkulu Genç Bir Mühendis</h2>
-              </div>
+              {% if about %}
+                <div class="section-header">
+                  <span class="badge-text">{{ about.badge_text }}</span>
+                  <h2>{{ about.title }}</h2>
+                </div>
 
-              <div class="description">
-                <p>Piri Reis Üniversitesi Bilişim Sistemleri Mühendisliği öğrencisiyim ve eş zamanlı olarak CBS Corporate Business Solutions'da SAP Danışmanı olarak görev alıyorum. Karmaşık sistem mimarileri ile pratik yazılım çözümleri arasında köprü kurmaktan büyük keyif alıyorum.</p>
-                <p>30'dan fazla ülkede global e-fatura uyumluluğu sağlıyor, AWS üzerinde yüksek trafikli bulut mimarileri tasarlıyor ve Node.js ile full-stack web platformları (Gurmeo_O) geliştiriyorum. Hem akademik hem de profesyonel hayatta uluslararası ekiplerle çalışarak teknik yeteneklerimi her geçen gün daha da ileriye taşımaya ve yeni küresel fırsatları değerlendirmeye odaklanıyorum.</p>
-              </div>
+                <div class="description">
+                  <p>{{ about.paragraph_1 }}</p>
+                  {% if about.paragraph_2 %}
+                    <p>{{ about.paragraph_2 }}</p>
+                  {% endif %}
+                </div>
+              {% else %}
+                <div class="section-header">
+                  <span class="badge-text">Beni Tanıyın</span>
+                  <h2>Hakkımda</h2>
+                </div>
+              {% endif %}
 
               <div class="cta-section">
                 <a href="#contact" class="btn btn-outline">
@@ -215,6 +241,7 @@
 
     </section>
 
+    <!-- ==================== ÖZGEÇMİŞ BÖLÜMÜ ==================== -->
     <section id="resume" class="resume section">
 
       <div class="container section-title" data-aos="fade-up">
@@ -225,39 +252,61 @@
       <div class="container" data-aos="fade-up" data-aos-delay="100">
 
         <div class="row gy-4">
+          <!-- Sol Kolon: Eğitim + Sertifikalar -->
           <div class="col-lg-6">
             <h3 class="resume-title">Eğitim</h3>
-            <div class="resume-item">
-              <h4>Bilişim Sistemleri Mühendisliği (Lisans)</h4>
-              <h5>2023 - 2027 (Beklenen Mezuniyet)</h5>
-              <p><em>Piri Reis Üniversitesi, İstanbul</em></p>
-              <p>Yazılım geliştirme, veritabanı yönetimi, algoritmalar ve sistem mimarisi üzerine aktif lisans eğitimi.</p>
-            </div>
+            {% for edu in educations %}
+              <div class="resume-item">
+                <h4>{{ edu.title }}</h4>
+                <h5>{{ edu.date_range }}</h5>
+                <p><em>{{ edu.institution }}</em></p>
+                {% if edu.description %}
+                  <p>{{ edu.description }}</p>
+                {% endif %}
+              </div>
+            {% empty %}
+              <p>Henüz eğitim bilgisi eklenmedi.</p>
+            {% endfor %}
 
-            <h3 class="resume-title">Sertifikalar</h3>
-            <div class="resume-item">
-              <h4>Cisco Networking Academy</h4>
-              <ul>
-                <li><strong>CSS Essentials</strong> (Aralık 2025)</li>
-                <li><strong>HTML Essentials</strong> (Aralık 2025)</li>
-                <li><strong>Introduction to Linux</strong> (Kasım 2025)</li>
-              </ul>
-            </div>
+            {% if certificates %}
+              <h3 class="resume-title">Sertifikalar</h3>
+              {% regroup certificates by provider as provider_list %}
+              {% for provider in provider_list %}
+                <div class="resume-item">
+                  <h4>{{ provider.grouper }}</h4>
+                  <ul>
+                    {% for cert in provider.list %}
+                      <li><strong>{{ cert.name }}</strong> ({{ cert.date }})</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endfor %}
+            {% endif %}
           </div>
 
+          <!-- Sağ Kolon: Deneyim -->
           <div class="col-lg-6">
             <h3 class="resume-title">Profesyonel Deneyim</h3>
-            <div class="resume-item">
-              <h4>SAP Danışmanı</h4>
-              <h5>07/2024 - Günümüz</h5>
-              <p><em>CBS Corporate Business Solutions, İstanbul</em></p>
-              <ul>
-                <li>SAP sistemleri üzerinden 30'dan fazla ülkede global e-fatura uyumluluğunu ve bulut tabanlı MCS entegrasyon süreçlerini yürütüyorum.</li>
-                <li>Jira üzerinden teknik destek biletlerini (ticket) yönetiyor, sorunların çözümü için kıdemli uzmanlara hızlı ve doğru yönlendirmeler yapıyorum.</li>
-                <li>Uluslararası teknik ekiplerle Microsoft Teams üzerinden doğrudan iletişim kurarak koordinasyon sağlıyorum.</li>
-                <li>Sistemlerin yüksek kullanılabilirliğini sürdürüyor, yasal düzenlemelere uygun kesintisiz veri akışı için aktif problem çözümü gerçekleştiriyorum.</li>
-              </ul>
-            </div>
+            {% for exp in experiences %}
+              <div class="resume-item">
+                <h4>{{ exp.title }}</h4>
+                <h5>{{ exp.date_range }}</h5>
+                {% if exp.location %}
+                  <p><em>{{ exp.company }}, {{ exp.location }}</em></p>
+                {% else %}
+                  <p><em>{{ exp.company }}</em></p>
+                {% endif %}
+                {% if exp.bullets %}
+                  <ul>
+                    {% for bullet in exp.bullet_list %}
+                      <li>{{ bullet }}</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </div>
+            {% empty %}
+              <p>Henüz deneyim bilgisi eklenmedi.</p>
+            {% endfor %}
           </div>
         </div>
 
@@ -265,6 +314,7 @@
 
     </section>
 
+    <!-- ==================== PORTFOLYO BÖLÜMÜ ==================== -->
     <section id="portfolio" class="portfolio section">
 
       <div class="container section-title" data-aos="fade-up">
@@ -281,6 +331,12 @@
               <div class="filters-wrapper" data-aos="fade-right" data-aos-delay="150">
                 <ul class="portfolio-filters isotope-filters">
                   <li data-filter="*" class="filter-active">Tüm Projeler</li>
+                  {% for project in projects %}
+                    {% if forloop.first %}
+                      {% with seen_filters="" %}
+                      {% endwith %}
+                    {% endif %}
+                  {% endfor %}
                   <li data-filter=".filter-web">Web & Bulut</li>
                   <li data-filter=".filter-sap">SAP & Sistem</li>
                 </ul>
@@ -290,53 +346,25 @@
             <div class="col-lg-9">
               <div class="row gy-4 portfolio-container isotope-container" data-aos="fade-up" data-aos-delay="200">
 
-                <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-web">
-                  <div class="portfolio-wrap">
-                    <img src="{% static 'assets/img/portfolio/aws.jpg' %}" class="img-fluid" alt="AWS Project" style="width: 100%; height: 250px; object-fit: cover;">
-                    <div class="portfolio-info">
-                      <div class="content">
-                        <span class="category">Bulut Mimarisi</span>
-                        <h4>AWS Yüksek Trafikli Web Platformu</h4>
-                        <p style="font-size: 14px; color: #e1e1e1; margin-top: 10px;">EC2 Auto Scaling, RDS, ElastiCache, Docker ve CloudFront kullanarak ölçeklenebilir altyapı tasarımı ve WAF ile güvenlik optimizasyonu.</p>
-                        <div class="portfolio-links">
-                          <a href="{% static 'assets/img/portfolio/aws.jpg' %}" class="glightbox" title="AWS Yüksek Trafikli Web Platformu"><i class="bi bi-plus-lg"></i></a>
+                {% for project in projects %}
+                  <div class="col-lg-6 col-md-6 portfolio-item isotope-item {{ project.filter_tag }}">
+                    <div class="portfolio-wrap">
+                      <img src="{{ project.image.url }}" class="img-fluid" alt="{{ project.title }}" style="width: 100%; height: 250px; object-fit: cover;">
+                      <div class="portfolio-info">
+                        <div class="content">
+                          <span class="category">{{ project.category }}</span>
+                          <h4>{{ project.title }}</h4>
+                          <p style="font-size: 14px; color: #e1e1e1; margin-top: 10px;">{{ project.tech_description|default:project.description }}</p>
+                          <div class="portfolio-links">
+                            <a href="{{ project.image.url }}" class="glightbox" title="{{ project.title }}"><i class="bi bi-plus-lg"></i></a>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-
-                <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-sap">
-                  <div class="portfolio-wrap">
-                    <img src="{% static 'assets/img/portfolio/sap.png' %}" class="img-fluid" alt="SAP Project" style="width: 100%; height: 250px; object-fit: cover;">
-                    <div class="portfolio-info">
-                      <div class="content">
-                        <span class="category">SAP & ABAP</span>
-                        <h4>Global E-Fatura Optimizasyonu</h4>
-                        <p style="font-size: 14px; color: #e1e1e1; margin-top: 10px;">ABAP kod düzeyinde hata ayıklama yaparak global e-fatura iş akışlarındaki kök neden analizini sağlama ve sistem darboğazlarını çözme.</p>
-                        <div class="portfolio-links">
-                          <a href="{% static 'assets/img/portfolio/sap.png' %}" class="glightbox" title="Global E-Fatura Optimizasyonu"><i class="bi bi-plus-lg"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-web">
-                  <div class="portfolio-wrap">
-                    <img src="{% static 'assets/img/portfolio/gurmeo.jpg' %}" class="img-fluid" alt="Gurmeo Project" style="width: 100%; height: 250px; object-fit: cover;">
-                    <div class="portfolio-info">
-                      <div class="content">
-                        <span class="category">Full-Stack Geliştirme</span>
-                        <h4>Gurmeo_O Keşif Platformu</h4>
-                        <p style="font-size: 14px; color: #e1e1e1; margin-top: 10px;">Node.js, Express ve MySQL kullanılarak geliştirilmiş, diyet tabanlı filtreleme algoritmaları ve sosyal modüllere sahip entegre platform.</p>
-                        <div class="portfolio-links">
-                          <a href="{% static 'assets/img/portfolio/gurmeo.jpg' %}" class="glightbox" title="Gurmeo_O Keşif Platformu"><i class="bi bi-plus-lg"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {% empty %}
+                  <p class="text-center">Henüz proje eklenmedi.</p>
+                {% endfor %}
 
               </div>
             </div>
@@ -348,11 +376,12 @@
 
     </section>
 
+    <!-- ==================== İLETİŞİM BÖLÜMÜ ==================== -->
     <section id="contact" class="contact section">
 
       <div class="container section-title" data-aos="fade-up">
         <h2>İletişim</h2>
-        <p>Benimle iletişime geçmek için aşağıdaki forrrrmu doldurabilir veya doğrudan mail atabilirsiniz.</p>
+        <p>Benimle iletişime geçmek için aşağıdaki formu doldurabilir veya doğrudan mail atabilirsiniz.</p>
       </div>
 
       <div class="container">
@@ -363,25 +392,19 @@
               <h3>İletişim Bilgileri</h3>
               <p>Projeleriniz, iş teklifleriniz ve teknik konular için ulaşabilirsiniz.</p>
 
-              <div class="info-item">
-                <div class="icon-box">
-                  <i class="bi bi-envelope"></i>
+              {% for info in contact_infos %}
+                <div class="info-item">
+                  <div class="icon-box">
+                    <i class="{{ info.icon_class }}"></i>
+                  </div>
+                  <div class="content">
+                    <h4>{{ info.label }}</h4>
+                    <p>{{ info.value }}</p>
+                  </div>
                 </div>
-                <div class="content">
-                  <h4>Email Adresi</h4>
-                  <p>metehansariates37@gmail.com</p>
-                </div>
-              </div>
-
-              <div class="info-item">
-                <div class="icon-box">
-                  <i class="bi bi-geo-alt"></i>
-                </div>
-                <div class="content">
-                  <h4>Konum</h4>
-                  <p>İstanbul 2, Türkiye</p>
-                </div>
-              </div>
+              {% empty %}
+                <p>Henüz iletişim bilgisi eklenmedi.</p>
+              {% endfor %}
             </div>
           </div>
 
@@ -427,7 +450,7 @@
   <footer id="footer" class="footer position-relative">
     <div class="container">
       <div class="copyright text-center ">
-        <p>© <span>Copyright</span> <strong class="px-1 sitename">{{ home_banner_name }}</strong> <span>Tüm Hakları Saklıdır</span></p>
+        <p>© <span>Copyright</span> <strong class="px-1 sitename">{% if hero %}{{ hero.name }}{% endif %}</strong> <span>Tüm Hakları Saklıdır</span></p>
       </div>
     </div>
   </footer>
