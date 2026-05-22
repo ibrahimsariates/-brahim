@@ -1,14 +1,14 @@
 from django.shortcuts import render
-from .models import GeneralSetting
+from .models import GeneralSetting, Project, Resume, SocialLink
 
 def index(request):
-    # Veritabanındaki tüm ayarları çekiyoruz
-    all_settings = GeneralSetting.objects.all()
-
-    # Verileri bir sözlük (dictionary) haline getiriyoruz
-    # Bu sayede HTML'de {{ home_banner_name }} yazdığında Django bunu bulacak
-    context = {setting.name: setting.parameter for setting in all_settings}
-
+    # Tüm verileri veritabanından çek
+    context = {
+        'settings': {s.key: s.value for s in GeneralSetting.objects.all()},
+        'projects': Project.objects.all(),
+        'resumes': Resume.objects.all(),
+        'social_links': SocialLink.objects.all(),
+    }
     return render(request, 'index.html', context)
 
 def contact(request):
